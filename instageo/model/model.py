@@ -224,7 +224,11 @@ class PrithviSeg(nn.Module):
                     padding=1,
                 ),
                 nn.BatchNorm2d(out_channels),
-                nn.ReLU(),
+                nn.ELU(),  # default ReLU activation
+                # Alternative activations (uncomment to use):
+                # nn.ELU(),  # Better for regression, handles negatives
+                # nn.Mish(),  # Smoother than ReLU
+                # nn.SiLU(),  # Swish activation
             )
 
         embed_dims = [
