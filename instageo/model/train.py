@@ -901,7 +901,15 @@ class PrithviRegressionModule(pl.LightningModule):
             optimizer, mode="min", factor=0.5, patience=3, verbose=True
         )
 
-        return [optimizer], [scheduler]
+        return {
+            "optimizer": optimizer,
+            "lr_scheduler": {
+                "scheduler": scheduler,
+                "monitor": "val_loss",  # Monitor validation loss
+                "interval": "epoch",
+                "frequency": 1
+            }
+        }
 
     def log_metrics(
         self,
