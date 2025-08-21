@@ -16,7 +16,7 @@ train:
   ignore_index: -1
   weight_decay: 0.01
   log_transform: False
-  loss_function: "huber"  # options: "mse", "mae", "huber"
+  loss_function: huber  # options: mse, mae, huber
 
 
 model:
@@ -25,7 +25,7 @@ model:
   depth: null
 
 dataloader:
-  bands: [1, 2, 3, 8, 11, 12]
+  bands: [0, 1]
   mean: [251.35568237304688, 447.950927734375, 452.6473083496094, 1995.3580322265625, 1629.1015625, 902.5798950195312]
   std: [144.5541229248047, 121.2476806640625, 188.4467315673828, 505.75445556640625, 462.396728515625, 367.0114440917969]
   img_size: 256
