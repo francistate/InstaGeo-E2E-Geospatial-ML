@@ -875,18 +875,41 @@ class PrithviRegressionModule(pl.LightningModule):
             Tuple[List[torch.optim.Optimizer], List[torch.optim.lr_scheduler]]:
             A tuple containing the list of optimizers and the list of LR schedulers.
         """
+        # AdamW optimizer (current)
         # optimizer = torch.optim.AdamW(
-        #     self.parameters(), lr=self.learning_rate, weight_decay=self.weight_decay
+        #     self.parameters(), 
+        #     lr=self.learning_rate, 
+        #     weight_decay=self.weight_decay,
+        #     betas=(0.9, 0.95),  # Better for ViTs
+        #     eps=1e-6
         # )
+        
+        # Alternative optimizers (uncomment to use):
+        # SGD with momentum
         optimizer = torch.optim.SGD(
-            self.parameters(), lr=self.learning_rate, momentum=0.9
+            self.parameters(), 
+            lr=self.learning_rate, 
+            weight_decay=self.weight_decay,
+            momentum=0.9,
+            nesterov=True
         )
-        scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(
-            optimizer, T_0=10, T_mult=2, eta_min=0
+        
+        # scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(
+        #     optimizer, T_0=10, T_mult=2, eta_min=0
+        # )
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer, mode="min", factor=0.5, patience=3, verbose=True
         )
 
-
-        return [optimizer], [scheduler]
+        return {
+            "optimizer": optimizer,
+            "lr_scheduler": {
+                "scheduler": scheduler,
+                "monitor": "val_loss",  # Monitor validation loss
+                "interval": "epoch",
+                "frequency": 1
+            }
+        }
 
     def log_metrics(
         self,
