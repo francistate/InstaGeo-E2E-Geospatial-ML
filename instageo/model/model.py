@@ -224,7 +224,7 @@ class PrithviSeg(nn.Module):
                     padding=1,
                 ),
                 nn.BatchNorm2d(out_channels),
-                nn.GELU(),  # default ReLU activation
+                nn.Mish(),  # default ReLU activation
                 # Alternative activations (uncomment to use):
                 # nn.ELU(),  # Better for regression, handles negatives
                 # nn.Mish(),  # Smoother than ReLU
