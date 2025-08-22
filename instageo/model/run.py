@@ -385,7 +385,8 @@ def main(cfg: DictConfig) -> None:
         )
 
         # run training and validation
-        trainer.fit(model, train_loader, valid_loader)
+        ckpt_path = cfg.checkpoint_path if cfg.checkpoint_path else None
+        trainer.fit(model, train_loader, valid_loader, ckpt_path=ckpt_path)
 
     elif cfg.mode == "eval":
         check_required_flags(["root_dir", "test_filepath", "checkpoint_path"], cfg)
